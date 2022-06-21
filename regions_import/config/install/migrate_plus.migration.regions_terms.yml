@@ -1,0 +1,53 @@
+id: regions_terms
+label: 'Custom Regions term migration'
+migration_group: Regions Import
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  # The URL of the JSON datasource
+  urls:
+    - 'modules/custom/regions_import/regions.flat.json'
+  # item_selector: []
+  fields:
+    -
+      name: name
+      label: 'Name'
+      selector: name
+    -
+      name: path
+      label: 'Path Alias'
+      selector: path
+  ids:
+    name:
+      type: string
+  constants:
+    slash: '/'
+    path_prefix: '/regions/'
+process:
+  type:
+    plugin: default_value
+  # title: name
+  name: name
+  # sticky:
+  #   plugin: default_value
+  #   default_value: 0
+  uid:
+    plugin: default_value
+    default_value: 0
+  regions_path:
+    plugin: default_value
+    source: path
+  path:
+    plugin: concat
+    source:
+      - constants/path_prefix
+      - '@regions_path'
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: regions
+migration_dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - regions_import

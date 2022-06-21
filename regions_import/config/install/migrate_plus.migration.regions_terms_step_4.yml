@@ -1,0 +1,56 @@
+id: regions_terms_step_4
+label: 'Custom Regions term hierarchical step 4 migration'
+migration_group: Regions Import Step 4 Hierarchical
+source:
+  plugin: regions_tree_json_step_four
+  path: 'modules/custom/regions_import/regions.tree.json'
+  fields:
+    -
+      name: name
+      label: 'Name'
+      selector: name
+    -
+      name: path
+      label: 'Path Alias'
+      selector: path
+    -
+      name: parent
+      label: 'Parent'
+      selector: parent
+  ids:
+    path:
+      type: string
+  constants:
+    slash: '/'
+    path_prefix: '/regions/'
+process:
+  type:
+    plugin: default_value
+  name: name
+  uid:
+    plugin: default_value
+    default_value: 0
+  regions_path:
+    plugin: default_value
+    source: path
+  path:
+    plugin: concat
+    source:
+      - constants/path_prefix
+      - '@regions_path'
+  parent:
+    -
+      plugin: migration_lookup
+      migration: regions_terms_step_4
+      source: parent
+    -
+      plugin: default_value
+      default_value: 0
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: regions
+migration_dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - regions_import
