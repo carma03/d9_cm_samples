@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @file
+ * Provides a movie entity type.
+ */
+
+use Drupal\Core\Render\Element;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\Core\Datetime\DrupalDateTime;
+
+/**
+ * Implements hook_theme().
+ */
+function movie_theme() {
+  return [
+    'movie' => [
+      'render element' => 'elements',
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for movie templates.
+ *
+ * Default template: movie.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the movie information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_movie(array &$variables) {
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function movie_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'movie_add_form' || $form_id === 'movie_edit_form') {
+    $form['#attached']['library'][] = 'movie/movie_validation_forms';
+    $form['#attached']['library'][] = 'movie/movie_form_styles';
+  }
+}
+
+/**
+ * implements hook_install().
+ */
+function movie_install() {
+  // Add terms to the genre vocabulary.
+  $vocab = 'genre';
+
+  // Term names to be added.
+  $items = [
+    'Genre',
+    'Comedy',
+    'Drama',
+    'Action',
+  ];
+  foreach ($items as $item) {
+    $term = Term::create([
+      'parent' => [],
+      'name' => $item,
+      'vid' => $vocab,
+    ])->save();
+  }
+}
+
+/**
+ * Custom validation for the add/edit movie form.
+ *
+ * @param [type] $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @return void
+ */
+function _movie_form_validate($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $releaseDateValue = $form_state->getValue('release_date')[0]['value'];
+  $release_date_timestamp = 0;
+
+  if ($releaseDateValue && method_exists($releaseDateValue, 'getTimeStamp')) {
+    $release_date_timestamp = $releaseDateValue->getTimeStamp();
+  }
+
+  if ($release_date_timestamp > time()) {
+    $form_state->setErrorByName('release_date', t('Release Date can not be in the future.'));
+  }
+}

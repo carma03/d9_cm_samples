@@ -1,0 +1,12 @@
+movie_form_styles:
+  css:
+    theme:
+      css/movie-form-styles.css: {}
+
+movie_validation_forms:
+  version: 1.x
+  js:
+    js/movie-validation-forms.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

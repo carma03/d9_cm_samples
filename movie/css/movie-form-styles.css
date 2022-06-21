@@ -1,0 +1,24 @@
+/****************************************
+*     Styles for Movie add/edit form    *
+*****************************************/
+
+@media all and (min-width: 960px) {
+  form.movie-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  form.movie-form > .form-wrapper {
+    flex: 1 0 25%;
+  }
+
+  form.movie-form .form-wrapper input:not([type="submit"]) {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  form.movie-form .form-actions {
+    flex-basis: 100%;
+  }
+}

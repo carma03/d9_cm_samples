@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - movie
+name: Genre
+vid: genre
+description: 'Stores the Genre of a Movie for movie custom module.'
+hierarchy: 0
+weight: 0

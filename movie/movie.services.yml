@@ -1,0 +1,12 @@
+services:
+  movie_normalizer.content_entity:
+    class: Drupal\movie\Normalizer\MovieContentEntityNormalizer
+    tags:
+      - { name: normalizer }
+    arguments: ['@entity_type.manager', '@entity_type.repository', '@entity_field.manager']
+  movie_normalizer.entity_reference_field_item_list:
+    class: Drupal\movie\Normalizer\MovieEntityReferenceFieldItemListNormalizer
+    arguments: ['@entity_type.manager', '@entity_type.repository', '@entity_field.manager']
+    tags:
+      - { name: normalizer, priority: 12 }
+

@@ -1,0 +1,7 @@
+name: Movie
+type: module
+description: 'Provides a movie entity.'
+package: Custom
+core: 8.x
+core_version_requirement: ^8 || ^9
+configure: entity.movie.settings
