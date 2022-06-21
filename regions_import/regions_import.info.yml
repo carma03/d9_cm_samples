@@ -1,0 +1,9 @@
+name: Regions Import
+core: 8.x
+type: module
+package: Custom
+
+dependencies:
+  - migrate
+  - migrate_tools
+  - migrate_plus
